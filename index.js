@@ -10,22 +10,27 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Set up EJS as the templating engine and middleware
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const year = new Date().getFullYear();
 
+// Render the form on the homepage
 app.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs", { year: year });
 });
 
+
+// Handle form submission
 app.post("/submit", (req, res) => {
   const randomAdj = adj[Math.floor(Math.random() * adj.length)];
   const randomNoun = noun[Math.floor(Math.random() * noun.length)];
 
   console.log(`${randomAdj} ${randomNoun}`);
 
+  // Append the generated band name to band_names.txt
   fs.appendFile('band_names.txt', `${randomAdj} ${randomNoun}\n`, function (err) {
   if (err) throw err;
   console.log('name saved!');
